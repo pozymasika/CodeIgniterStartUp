@@ -40,10 +40,10 @@ a{
                     <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><span><i class="fas fa-envelope"></i></span> Settings</a>
                     <ul class="collapse list-unstyled" id="homeSubmenu">
                         <li>
-                            <a href="#">Update Profile</a>
+                            <a href="<?php echo base_url().'index.php/Login/profile';?>">Update Profile</a>
                         </li>
                         <li>
-                            <a href="#">Update Password</a>
+                            <a href="<?php echo base_url().'index.php/Login/password';?>">Update Password</a>
                         </li>
                         <li>
                             <a href="#">User Settings</a>

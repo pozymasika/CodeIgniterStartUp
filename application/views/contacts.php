@@ -12,7 +12,8 @@
                     </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <div class="col-sm-6">
-
+<p><?php echo $this->session->flashdata('success_msg'); ?></p>
+                    <p><?php echo $this->session->flashdata('error_msg'); ?></p>
                         </div>
                         <div class="col-sm-6">
                                 <div class="table-title">
@@ -42,8 +43,8 @@ foreach($data as $row){
 			<td><?php echo $row->ContEmail; ?></td>
 			<td><?php echo $row->CountryCode; ?></td>
 			<td><?php echo $row->ContPhone; ?></td>
-            <td><button type="button" class="btn btn-warning"><a href="includes\contacts\editContact.php?id=<?php echo $row->ContID ?>"><i class="fas fa-edit"></i></a></button></td>
-            <td><button type="button" class="btn btn-danger"><a href="deleteContacts?id=<?php echo $row->ContID ?>"><i class="fas fa-trash-alt"></i></a></button></td>
+            <td><button type="button" class="btn btn-warning"><a href='<?php echo base_url() . "index.php/Login/editcontact?id=$row->ContID"; ?>'><i class="fas fa-edit"></i></a></button></td>
+            <td><button type="button" class="btn btn-danger"><a href='<?php echo base_url() . "index.php/Login/deleteContacts?id=$row->ContID"; ?>'><i class="fas fa-trash-alt"></i></a></button></td>
     </tr>
 <?php }?>
 

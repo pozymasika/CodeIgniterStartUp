@@ -58,8 +58,7 @@ foreach($data as $row) {
 		</div>
 		<div class="modal-body">
 
-			<form action="" method="post">
-			<div class="form-group"><label for="type">Type:</label>
+<?php echo form_open('Login/sendSMS') ?>			<div class="form-group"><label for="type">Type:</label>
 			<select name="contact[]" class="selectpicker" data-live-search="true" multiple required >
 			<?php
 
@@ -83,7 +82,6 @@ echo $category->ContName ?></option>
 		<div class="modal-footer">
 			<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 		</div>
-
 </div>
 
 <div class="modal" id="group">
@@ -95,7 +93,7 @@ echo $category->ContName ?></option>
                 </div>
                 <div class="modal-body">
 
-                    <form action="" method="post">
+                    <?php echo form_open('Login/sendSMS') ?>
 
                             <div class="form-group">
                             <select name="cat_id[]" id="" class="selectpicker" multiple >

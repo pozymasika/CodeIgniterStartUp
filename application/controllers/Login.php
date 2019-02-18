@@ -25,11 +25,9 @@ class Login extends CI_Controller
     {
         $this->load->view('signup');
     }
-
     //process signup form
     public function sprocess()
     {
-        // if($this->input->post('submit')){
             $name = $this->input->post('name');
             $username = $this->input->post('username');
             $email = $this->input->post('email');
@@ -49,14 +47,13 @@ class Login extends CI_Controller
                 $this->session->set_flashdata("error_msg", "Email already taken");
                 redirect('login/signup');
             }
-            
 }
-
     //process login
     public function process()
     {
         $email = $this->input->post('email');
         $password = $this->input->post('password');
+
 // check if username and password checkoff
         $lvalidation = $this->Main_Model->login($email, $password);
 
@@ -72,7 +69,6 @@ class Login extends CI_Controller
             $this->load->view('login_view');
         }
     }
-
 // dashboard
     public function welcome()
     {
@@ -81,14 +77,57 @@ class Login extends CI_Controller
         $this->load->view('template/footer.php');
     }
 
-//     // process logout
-//     public function logout()
-//     {
-//         $this->session->unset_userdata('user');
-//         redirect('Login');
-//     }
+    // process logout
+    public function logout()
+    {
+        $this->session->unset_userdata('user');
+        redirect('Login');
+    }
 
-//     //process category add new
+    // function edit profile 
+    public function profile()
+    {
+        $this->load->view('template/header.php');
+        $this->load->view('profile');
+        $this->load->view('template/footer.php');
+    }
+public function updateprof()
+{
+        $name = $this->input->post('name');
+        $username = $this->input->post('username');
+        $email = $this->input->post('email');
+        $validation = $this->Main_Model->validateReg($email);
+        if ($validation) {
+            $this->Main_Model->updateProfile($name, $username, $email);
+            $this->session->set_flashdata('success_msg', 'Account info Successfully updated');
+            redirect('login/profile');
+        } else {
+            $this->session->set_flashdata("error_msg", "Email already taken");
+            redirect('login/profile');
+        }
+}
+    public function password()
+    {
+        $this->load->view('template/header.php');
+        $this->load->view('password');
+        $this->load->view('template/footer.php');
+    }
+    public function updatePass()
+    {
+        $id = $this->input->post('id');
+        $oldpassword = $this->input->post('oldpassword');
+        $newpassword = $this->input->post('newpassword');
+       
+        if($this->Main_Model->updatePassword($oldpassword, $newPassword))
+        {
+        $this->session->set_flashdata('success_msg', 'Password Updated  successfully deleted');
+        redirect('Login/password');
+        } else {
+        $this->session->set_flashdata('error_msg', 'Error Updating password');
+        redirect('Login/password');
+    }
+}
+    //process category add new
     public function addCategory(){
         $name= $this->input->post('catName');
         $desc = $this->input->post('catDesc');
@@ -99,7 +138,7 @@ class Login extends CI_Controller
         {
             $this->Main_Model->addCategory($catOrgId, $name, $desc);
             $this->session->set_flashdata('success_msg', 'Category added successfully');
-            redirect('Login/contacts');
+            redirect('Login/category');
         }else{
            
             $this->session->set_flashdata('error_msg', 'Category Name Already exist');
@@ -113,36 +152,48 @@ class Login extends CI_Controller
         $this->load->view('category', $result);
         $this->load->view('template/footer.php');
     }
-
+    public function editcat(){
+      $id =   $this->input->get('id');
+        $result['data'] = $this->Main_Model->readCategory($id);
+        $this->load->view('template/header.php');
+        $this->load->view('editCategory',$result);
+        $this->load->view('template/footer.php');
+    }
     public function editCategory()
     {
+        $catid = $this->input->post('id');
         $name = $this->input->post('name');
-        $desc    = $this->input->post('desc');
-        $catOrgId =1;
+        $desc = $this->input->post('desc');
+        $catOrgId = 29;
         $validation = $this->Main_Model->validateCatname($name);
-        if($validation)
-        {
-            $this->Main_Model->updateCategory($catOrgId, $name, $catDesc);
-            $this->session->set_flashdata('success_msg', 'Category Successfully edited');
-            redirect('Login/category');
-        }else{
-            $this->session->set_flashdata('error_msg', 'Category Name Already exist');
+        
+        if ($validation) {
+            if($this->Main_Model->updateCategory($catid, $name, $desc))
+            {
+                $this->session->set_flashdata('success_msg', 'Category Successfully edited');
+                redirect('Login/category');
+            }else{
+                $this->session->set_flashdata('error_msg', 'Something went wrong ');
+                redirect('Login/category');
+            }
+        } else {
+                $this->session->set_flashdata('error_msg', 'Category Name Already exist');
             redirect('Login/category');
         }
     }
 
-    public function deleteCategory()
+    public function deleteCategory($id)
     {
         $id = $this->input->get('id');
-        if ($this->Main_Model->deleteContacts($id)) {
+
+        if ($this->Main_Model->deleteCategory($id)) {
             $this->session->set_flashdata('success_msg', 'Category successfully deleted');
             redirect('Login/category');
         } else {
-            $this->session->set_flashdata('error', 'Error deleting category');
+            $this->session->set_flashdata('error_msg', 'Error deleting category');
             redirect('Login/category');
         }
     }
-    
 
     // Process contacts
     public function contacts()
@@ -173,22 +224,35 @@ class Login extends CI_Controller
             redirect('Login/contacts');
         }
     }
-
+    public function editcontact()
+    {
+       $id =  $this->input->get('id');
+            $result['data'] = $this->Main_Model->readContact($id);
+            $this->load->view('template/header.php');
+            $this->load->view('editContact', $result);
+            $this->load->view('template/footer.php');
+    }
     public function editContacts()
     {
-        $contName = $this->input->post('');
-        $phone= $this->input->post('');
-        $contPhone = $this->input->post('');
-        $contEmail = $this->input->post('');
-        $validation = $this->Main_Model->validateCont($contPhone);
+        $id = $this->input->post('id');
+        $country = $this->input->post('country');
+        $contName = $this->input->post('contName');
+        $contPhone= $this->input->post('phone');
+        $contEmail = $this->input->post('contmail');
+        $validation = $this->Main_Model->validateCont($phone);
         if($validation)
         {
-            $this->Main_Model->updateContacts($country, $contPhone, $contName, $contEmail);
-            $this->session->set_flashdata('success_msg', 'Contact successfully updated');
-            redirect('Login/contacts');
+        
+           if($this->Main_Model->updateContacts($id, $country, $contPhone, $contName, $contEmail)) {
+                $this->session->set_flashdata('success_msg', 'Contact successfully updated');
+                redirect('Login/contacts');
+           }else{
+                $this->session->set_flashdata('error_msg', 'Contact was not updated');
+                redirect('Login/contacts');
+           }
         }else{
-            $this->session->set_flashdata('error', 'Error updating content phone number already exist');
-            redirect('Login/editcontacts.php');
+            $this->session->set_flashdata('error_msg', 'Error updating content phone number already exist');
+            redirect('Login/editContacts');
         }
     }
 
@@ -205,16 +269,24 @@ class Login extends CI_Controller
     }
 
     // messages
-    // public function message()
-    // {
-    //     $result['cont'] = $this->Main_Model->displayContacts();
-    //     $result['cate'] = $this->Main_Model->displayCategories();
-    //     $result['data'] = $this->Main_Model->displayMessages();
-    //     $this->load->view('template/header.php');
-    //     $this->load->view('message', $result);
-    //     $this->load->view('template/footer.php');
-    // }
-
+    public function message()
+    {
+        $result['cont'] = $this->Main_Model->displayContacts();
+        $result['cate'] = $this->Main_Model->displayCategories();
+        $result['data'] = $this->Main_Model->displayMessages();
+        $this->load->view('template/header.php');
+        $this->load->view('message', $result);
+        $this->load->view('template/footer.php');
+    }
+public function sendSMS(){
+    $ujumbe = $this->input->post('ujumbe');
+    $contact = $this->input->post('contact');
+$result['data'] = $ujumbe;
+$result['data1'] =$contact;
+        $this->load->view('template/header.php');
+        $this->load->view('message_view', $result);
+        $this->load->view('template/footer.php');
+}
     // public function resendMsg()
     // {
 

@@ -10,7 +10,10 @@
                         <i class="fas fa-align-justify"></i>
                     </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
                         <div class="col-sm-6">
+										<p><?php echo $this->session->flashdata('success_msg'); ?></p>
+                    <p><?php echo $this->session->flashdata('error_msg'); ?></p>
                         </div>
                         <div class="col-sm-6">
                                 <div class="table-title">
@@ -36,8 +39,8 @@ foreach($data as $row){
 		<tr>
 			<td><?php echo $row->Name; ?></td>
 			<td><?php echo $row->Description; ?></td>
-            <td><button type="button" class="btn btn-warning"><a href="#"><i class="fas fa-edit"></i></a></button></td>
-            <td><button type="button" class="btn btn-danger"><a href="#"><i class="fas fa-trash-alt"></i></a></button></td>
+            <td><button type="button" class="btn btn-warning"><a href='<?php echo base_url() . "index.php/Login/editcat?id=$row->CatID"; ?>'><i class="fas fa-edit"></i></a></button></td>
+            <td><button type="button" class="btn btn-danger"><a href='<?php echo base_url() . "index.php/Login/deleteCategory?id=$row->CatID"; ?>'><i class="fas fa-trash-alt"></i></a></button></td>
 		</tr>
 <?php
 }

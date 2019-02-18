@@ -77,7 +77,7 @@ class Main_Model extends CI_Model
         $this->db->where('id', $id);
         $this->db->get('users');;
     }
-    /**
+    /** 
      * User registration and details
      *
      * @return updateProfile
@@ -97,7 +97,7 @@ class Main_Model extends CI_Model
      *
      * @return updatePassword
      **/
-    public function updatePassword($newPassword)
+    public function updatePassword($oldpassword, $newPassword)
     {
         $this->db->set('Password', $password, false);
         $this->db->update('users');
@@ -117,7 +117,6 @@ class Main_Model extends CI_Model
 public function validateCatname($name){
     $this->db->where('Name', $name);
     $query = $this->db->get('categories');
-    
     if($query->num_rows() >0)
     {
         return false;
@@ -150,7 +149,8 @@ public function validateCatname($name){
     {
 // display category details  
         $this->db->where('CatID', $id);
-        $this->db->get();;
+        $query = $this->db->get('categories');
+       return  $query->result();
     }
 
 
@@ -159,14 +159,19 @@ public function validateCatname($name){
      *
      * @return updateCategory
      **/
-    public function updateCategory($catOrgId, $name, $catDesc)
+    public function updateCategory($catid, $name, $desc)
     {
         $data = array(
             'Name' => $name,
-            'Description' => $catDesc
+            'Description' => $desc
         );
-        $this->db->where('CatOrgId', $catOrgId);
-        $this->db->update('categories', $data);
+        $this->db->where('CatID', $catid);
+        $query = $this->db->update('categories', $data);
+        if($query){
+            return true;
+        }else{
+            return false;
+        }
     }
     /**
      * User registration and details
@@ -175,7 +180,7 @@ public function validateCatname($name){
      **/
     public function deleteCategory($id)
     {
-        $this->db->where('id', $id);
+        $this->db->where('CatID', $id);
         $this->db->delete('categories');
     }
 
@@ -219,13 +224,18 @@ public function validateCatname($name){
         return $query->result();
 
     }
-
+    
+    public function readContact($id){
+        $this->db->where('ContID', $id);
+        $query = $this->db->get('contacts');
+        return $query->result();
+    }
     /**
      * User registration and details
      *
      * @return updateContacts
      **/
-    public function updateContacts($country, $contPhone, $contName, $contEmail)
+    public function updateContacts($id, $country, $contPhone, $contName, $contEmail)
     {
         $data = array(
             'CountryCode' => $country,
@@ -233,8 +243,13 @@ public function validateCatname($name){
             'ContName' => $contName,
             'ContEmail' => $contEmail
         );
-
-        $this->db->update('contacts', $data);
+        $this->db->where('ContID', $id);
+        if($this->db->update('contacts', $data))
+        {
+            return true;
+        }else{
+            return false;
+        }
     }
     /**
      * User registration and details
@@ -243,10 +258,9 @@ public function validateCatname($name){
      **/
     public function deleteContacts($id)
     {
-        $this->db->where('id', $id);
+        $this->db->where('ContID', $id);
         $this->db->delete('contacts');
     }
-
     /**
      * User registration and details
      *
@@ -264,9 +278,15 @@ public function validateCatname($name){
      *
      * @return addMessage
      **/
-    public function addMessage()
+    public function addMessage($creator, $ujumbe, $contact)
     {
-
+        $time =now();
+        $data = array(
+            'MsgText'=>$ujumbe,
+            'MsgCreateTime'=>$time,
+            'MsgSender'=>$creator
+        );
+        
     }
     /**
      * User registration and details
