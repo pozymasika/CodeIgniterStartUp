@@ -27,13 +27,21 @@ background-color:#882525;
 <article class="card-body mx-auto" style="max-width: 500px;">
     <h4 class="card-title mt-3 text-center">Create Account</h4>
 	<form action="<?php echo site_url('Login/sprocess'); ?>" method="post">
+	<?php validation_errors();?>
+	<?php echo $this->session->flashdata("error_msg");?>
+	<?php echo form_open('login'); ?>
 	<div class="form-group input-group">
 		<div class="input-group-prepend">
 		    <span class="input-group-text"> <i class="fa fa-user"></i> </span>
 		 </div>
         <input name="name" class="form-control" placeholder="Full name" type="text" required>
-       
-    </div> 
+	</div> 
+		<div class="form-group input-group">
+		<div class="input-group-prepend">
+		    <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+		 </div>
+        <input name="username" class="form-control" placeholder="User Name" type="text" required>
+	</div> 	
     <div class="form-group input-group">
     	<div class="input-group-prepend">
 		    <span class="input-group-text"> <i class="fas fa-industry"></i> </span>
@@ -99,8 +107,8 @@ background-color:#882525;
 			<label class="checkbox-inline"><input type="checkbox" required="required"> I accept the <a href="#">Terms of Use</a> &amp; <a href="#">Privacy Policy</a></label>
 	</div>                   
     <div class="form-group">
-        <button type="submit" class="btn btn-primary btn-block" name="submit"> Create Account  </button>
-    </div>      
+		<input type="submit" value="Submit"  class="btn btn-primary btn-block">
+	</div>      
     <p class="text-center">Have an account? <a href='<?php echo base_url()."index.php/Login/index";?>'>Log In</a> </p>                                                                 
 </form>
 </article>

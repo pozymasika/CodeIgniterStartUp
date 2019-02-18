@@ -1,7 +1,6 @@
 <div id="content">
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="container-fluid">
-
                     <button type="button" id="sidebarCollapse" class="navbar-btn">
                         <span></span>
                         <span></span>
@@ -12,7 +11,6 @@
                     </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <div class="col-sm-6">
-
                         </div>
                         <div class="col-sm-6">
                                 <div class="table-title">
@@ -58,9 +56,9 @@ foreach($data as $row){
         <h4 class="modal-title">New Category</h4>
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
-      <div class="modal-body">
-     
-<form action="" method="post">
+      <div class="modal-body"> 
+			<?php echo $this->session->flashdata('error_msg'); ?>
+			<?php echo form_open('Login/addCategory')?>
     <div class="form-group"><label for="Name">Category Name:</label><input type="text" name="catName" id="catName" class="form-control form-control-sm" placeholder="Enter Category Name" required>
     <span class="help-block"></span>
     </div>
@@ -70,6 +68,7 @@ foreach($data as $row){
     <span class="help-block"></span>
     </div>
     <button type="submit" class="btn btn-sm btn-primary" name="cat">Submit</button>
+		
 </form> 
       </div>
       <div class="modal-footer">

@@ -61,9 +61,10 @@ foreach($data as $row){
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
       <div class="modal-body">
-     
-    <form action="" method="post">
-            <div class="form-group">
+        <?php echo $this->session->flashdata('error_msg');?>
+        <?php echo $this->session->flashdata('success_msg'); ?>
+        <?php echo form_open('Login/addContact');?>
+                <div class="form-group">
             <label for="category">Select Category: </label>
         <select name="type" id="" class="form-control">
         <?php
