@@ -118,7 +118,7 @@ public function updateprof()
         $oldpassword = $this->input->post('oldpassword');
         $newpassword = $this->input->post('newpassword');
        
-        if($this->Main_Model->updatePassword($oldpassword, $newPassword))
+        if($this->Main_Model->updatePassword($id , $oldpassword, $newPassword))
         {
         $this->session->set_flashdata('success_msg', 'Password Updated  successfully deleted');
         redirect('Login/password');

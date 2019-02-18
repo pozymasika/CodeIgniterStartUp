@@ -82,13 +82,15 @@ class Main_Model extends CI_Model
      *
      * @return updateProfile
      **/
-    public function updateProfile($name, $username, $email)
+    public function updateProfile($id, $name, $username, $email)
     {
         $data = array(
             "Name" => $name,
             "UserName" => $username,
             "Email" => $email
         );
+        $this->db->where('userid', $id);
+        $this->update('users');
     }
 
 
