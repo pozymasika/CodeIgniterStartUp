@@ -26,27 +26,28 @@ class Main_Model extends CI_Model
                ' AccountLocation'=>$location,
                 'AccountType'=>$type
           );
-        $this->db->insert('accounts', $accounts);
         $data = array(
-            'accountId' => 1,
             'UserName' => $username,
             'Name' => $name,
             'Email' => $email,
             'Password' => $password
         );
-        $this->db->insert('users', $data);
+      if($this->db->insert('accounts', $accounts)){
+           $data['accountId'] = $last_insert_id;
+            $this->db->insert('users', $data);
+            return $last_insert_id;
+      }
     } //end register
 
     public function validateReg($email)
     {
-        $options =" ";
         $this->db->where('Email', $email);
         $query = $this->db->get(['users']);
         if($query->num_rows()>0)
         {
-            return true;
-        }else{
             return false;
+        }else{
+            return true;
         }
     }
     /**
@@ -61,7 +62,7 @@ class Main_Model extends CI_Model
         $query = $this->db->get('users');
 
         if($query->num_rows()>0){
-            return true;
+            return $query->result();
         }else{
             return false;
         }
@@ -74,23 +75,27 @@ class Main_Model extends CI_Model
      **/
     public function readProfile($id)
     {
-        $this->db->where('id', $id);
-        $this->db->get('users');;
+        $this->db->where('userid', $id);
+        $query = $this->db->get('users');
+        return $query->result();
     }
     /** 
      * User registration and details
      *
      * @return updateProfile
      **/
-    public function updateProfile($id, $name, $username, $email)
+    public function updateProfile($id, $name, $username)
     {
         $data = array(
             "Name" => $name,
             "UserName" => $username,
-            "Email" => $email
         );
         $this->db->where('userid', $id);
-        $this->update('users');
+       if($this->db->update('users', $data)){
+           return true;
+       }else{
+           return false;
+       }
     }
 
 
@@ -99,10 +104,26 @@ class Main_Model extends CI_Model
      *
      * @return updatePassword
      **/
-    public function updatePassword($oldpassword, $newPassword)
+    public function updatePassword($id, $oldpassword, $newpassword)
     {
-        $this->db->set('Password', $password, false);
-        $this->db->update('users');
+        $this->db->select('*');
+        $this->db->from('users');
+        $this->db->where('userId', $id);
+        $query = $this->db->get();
+        $data =$query->result();
+
+        foreach($data as $row){
+            $dbpass = $row->Password;
+        }
+
+        if($oldpassword == $dbpass){
+            $this->db->set('Password', $newpassword);
+            $this->db->update('users');
+            return true;
+        }else{
+            return false;
+        }
+
     }
 
     /**
@@ -116,8 +137,18 @@ class Main_Model extends CI_Model
         $this->db->delete('accounts');
     }
 
-public function validateCatname($name){
+    public function details($userid){
+        $this->db->select('*');
+        $this->db->from('users');
+        $this->db->join('accounts', 'accounts.id = users.accountId');
+        $this->db->where('userId', $userid);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+public function validateCatname($name, $catOrgId){
     $this->db->where('Name', $name);
+    $this->db->where('CatOrgId', $catOrgId);
     $query = $this->db->get('categories');
     if($query->num_rows() >0)
     {
@@ -186,8 +217,9 @@ public function validateCatname($name){
         $this->db->delete('categories');
     }
 
-    public function validateCont($contPhone){
+    public function validateCont($contPhone, $contCreator){
         $this->db->where('ContPhone', $contPhone);
+        $this->db->where('ContCreator',$contCreator);
         $query = $this->db->get('contacts');
         if($query->num_rows()>0){
             return false;
@@ -204,7 +236,7 @@ public function validateCatname($name){
     public function addcontacts($contCatId, $country, $contPhone, $contName, $contCreator, $contEmail)
     {
         $data = array(
-            'ContCatID' => 1,
+            'ContCatID' =>$contCatId,
             'CountryCode' => $country,
             'ContPhone' => $contPhone,
             'ContName' => $contName,
@@ -219,10 +251,13 @@ public function validateCatname($name){
      *
      * @return displayContacts
      **/
-    public function displayContacts()
+    public function displayContacts($userid)
     {
         // display all contacts here 
-        $query = $this->db->query("SELECT * FROM `contacts`");
+        $this->db->select('*');
+        $this->db->from('contacts');
+        $this->db->where('ContCreator',$userid);
+        $query = $this->db->get();
         return $query->result();
 
     }
@@ -268,9 +303,22 @@ public function validateCatname($name){
      *
      * @return displayCategories
      **/
-    public function displayCategories()
+    public function displayCategories($catOrgId)
     {
-        $query = $this->db->query("SELECT * FROM `categories`");
+        $this->db->select('*');
+        $this->db->from('categories');
+        $this->db->where('CatOrgId', $catOrgId);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+     public function displContbyCat ($catOrgId)
+    {
+        $this->db->select('*');
+        $this->db->from('contacts');
+        $this->db->join('categories', 'categories.CatID = contacts.ContCatID');
+        $this->db->where('catOrgId', $catOrgId);
+        $query = $this->db->get();
         return $query->result();
     }
 
@@ -317,8 +365,6 @@ public function validateCatname($name){
     public function dispMsgDetails()
     {
         // display message sent to individual or category
-
-
     }
 
     // Statistics

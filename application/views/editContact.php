@@ -22,6 +22,8 @@ foreach($data as $row ){
                     </button>
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                   <h4><?php echo $this->session->userdata('username'); ?></h4>
+
                     </div>
                 </div>
             </nav>

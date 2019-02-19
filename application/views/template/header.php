@@ -51,7 +51,7 @@ a{
                     </ul>
 				</li>
 				<li>
-                    <a href="#"><span><i class="fas fa-sign-out-alt"></i></span> Logout</a>
+                    <a href="<?php echo base_url() . 'index.php/Login/logout'; ?>"><span><i class="fas fa-sign-out-alt"></i></span> Logout</a>
                 </li>
             </ul>
         </nav>

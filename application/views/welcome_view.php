@@ -94,6 +94,8 @@
                         <i class="fas fa-align-justify"></i>
                     </button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                                    <h4><?php echo $this->session->userdata('username'); ?></h4>
+                                     <h4><?php echo $this->session->userdata('userid'); ?></h4>
                     </div>
                 </div>
             </nav>

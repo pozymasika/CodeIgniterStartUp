@@ -14,6 +14,8 @@
                         <div class="col-sm-6">
 										<p><?php echo $this->session->flashdata('success_msg'); ?></p>
                     <p><?php echo $this->session->flashdata('error_msg'); ?></p>
+										<h4><?php echo $this->session->userdata('username'); ?></h4>
+
                         </div>
                         <div class="col-sm-6">
                                 <div class="table-title">
@@ -54,9 +56,9 @@ foreach($data as $row){
 <div class="modal" id="myModal">
   <div class="modal-dialog">
     <div class="modal-content">
-
       <div class="modal-header">
-        <h4 class="modal-title">New Category</h4>
+				<h4 class="modal-title">New Category</h4>
+				          <p> <?php echo $this->session->userdata('accountId'); ?></p>
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
       <div class="modal-body"> 
@@ -71,7 +73,6 @@ foreach($data as $row){
     <span class="help-block"></span>
     </div>
     <button type="submit" class="btn btn-sm btn-primary" name="cat">Submit</button>
-		
 </form> 
       </div>
       <div class="modal-footer">

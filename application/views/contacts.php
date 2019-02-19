@@ -13,7 +13,8 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <div class="col-sm-6">
 <p><?php echo $this->session->flashdata('success_msg'); ?></p>
-                    <p><?php echo $this->session->flashdata('error_msg'); ?></p>
+<p><?php echo $this->session->flashdata('error_msg'); ?></p>
+                                <h4><?php echo $this->session->userdata('username'); ?></h4>
                         </div>
                         <div class="col-sm-6">
                                 <div class="table-title">
@@ -47,11 +48,9 @@ foreach($data as $row){
             <td><button type="button" class="btn btn-danger"><a href='<?php echo base_url() . "index.php/Login/deleteContacts?id=$row->ContID"; ?>'><i class="fas fa-trash-alt"></i></a></button></td>
     </tr>
 <?php }?>
-
     </tbody>
 </table>
         </div>
-
 	</div> 
     <div class="modal" id="myModal">
   <div class="modal-dialog">
@@ -80,12 +79,10 @@ foreach($data as $row){
     <div class="form-group">
     <label for="country">Select Country: </label>
     <select name="country" id="" class="form-control" >
-   
             <option value="+254">Kenya</option>
             <option value="+252">Uganda</option>
             <option value="+255">Tanzania</option>
     </select>
-    
     </div>
             <div class="form-group">
                 <label for="OrgName">Contact Name:</label> <input type="text" name="contName" id="OrgName" class="form-control form-control-sm" placeholder="QQ software ltd" required>
