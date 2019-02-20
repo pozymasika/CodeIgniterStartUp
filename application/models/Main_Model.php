@@ -404,22 +404,22 @@ public function validateCatname($name, $catOrgId){
         return $query->num_rows();
     }
 
-    public function saveMessages()
+    public function saveMessages($ujumbe, $recipients)
     {
-        $created = now();
+        $created = date("Y-m-d H:i:s");
+        $userid = $this->session->userdata('userid');
         $data = array(
-'MsgText'=>$ujumbe,
-'MsgCreateTime'=>$created,
-'MsgSender'=>$userid
+            'MsgText'=>$ujumbe,
+            'MsgCreateTime'=>$created,
+            'MsgSender'=>$userid
         );
         $data1 = array(
-'Recipients'=>$recipients
-);
-        $this->db->insert('messages');
-
-        if($this->db->insert('messages'))
+            'Recipients'=> json_encode($recipients)
+        );
+        $save = $this->db->insert('messages', $data);
+        if($save)
         {
-            $last_insert_id = $this->db->insertid();
+            $last_insert_id = $this->db->insert_id();
             $data1['MsgID'] = $last_insert_id;
             $this->db->insert('msgdata', $data1);
         }else{

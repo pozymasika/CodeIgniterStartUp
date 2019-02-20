@@ -14,19 +14,16 @@ class SendSMS extends AfricasTalking
     public $from;
     
     public function __construct(){
-        $username = "Quadrant";
-        $apiKey = "987110bf90a5b5167b235b821d62d5c5e45fa6a25f3de13f973dc53eaf9ac32d";
-        $AT = new AfricasTalking($username, $apiKey);
-        $sms = $AT->sms();
+        $this->username = "Quadrant";
+        $this->apiKey = "987110bf90a5b5167b235b821d62d5c5e45fa6a25f3de13f973dc53eaf9ac32d";
+        $this->AT = new AfricasTalking($this->username, $this->apiKey);
+        $this->application = $this->AT->application();
+        $this->sms = $this->AT->sms();
     }
 
     public function getBalance()
     {  
         try {
-            $username = "Quadrant";
-            $apiKey = "987110bf90a5b5167b235b821d62d5c5e45fa6a25f3de13f973dc53eaf9ac32d";
-            $AT = new AfricasTalking($username, $apiKey);
-            $application = $this->$AT->application();
             $data = $this->application->fetchApplicationData();
           return  $data;       
         } catch (Exception $e) {
@@ -35,19 +32,18 @@ class SendSMS extends AfricasTalking
     }
 
     public function fetchMessage($recipients, $message, $from){
-
-        $data = array($recipients, $message, $from);
-        return $data;
-        // try {
-        //     $result = $this->sms->send([
-        //         'to' => $recipients,
-        //         'message' => $message,
-        //         'from' => $from
-        //     ]);
-        //     return $result;
-        // } catch (Exception $e) {
-        //     echo "Error: " . $e->getMessage();
-        // }
+        // $data = array($recipients, $message, $from);
+        // return $data;
+        try {
+            $result = $this->sms->send([
+                'to' => $recipients,
+                'message' => $message,
+                'from' => $from
+            ]);
+            return $result;
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
     }
 }
 ?>

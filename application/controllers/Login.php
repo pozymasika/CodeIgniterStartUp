@@ -10,7 +10,6 @@ class Login extends CI_Controller
         $this->load->library('form_validation');
         $this->load->model('Main_Model');
         $this->load->library('SendSMS');
-        $new = new SendSMS();
     }
 
     public function index()
@@ -334,7 +333,7 @@ public function updateprof()
         $from ="0733248479";
         $result['data1'] = $this->sendsms->fetchMessage($recipients, $message, $from);
         if($result == TRUE){
-            $this->Main_Model->saveMessages();
+            $this->Main_Model->saveMessages($message, $recipients);
             $this->load->view('template/header.php');
             $this->load->view('test', $result);
             $this->load->view('template/footer.php');
