@@ -403,4 +403,28 @@ public function validateCatname($name, $catOrgId){
         $query = $this->db->query('SELECT * FROM categories');
         return $query->num_rows();
     }
+
+    public function saveMessages()
+    {
+        $created = now();
+        $data = array(
+'MsgText'=>$ujumbe,
+'MsgCreateTime'=>$created,
+'MsgSender'=>$userid
+        );
+        $data1 = array(
+'Recipients'=>$recipients
+);
+        $this->db->insert('messages');
+
+        if($this->db->insert('messages'))
+        {
+            $last_insert_id = $this->db->insertid();
+            $data1['MsgID'] = $last_insert_id;
+            $this->db->insert('msgdata', $data1);
+        }else{
+            return;
+        }
+       
+    }
 }

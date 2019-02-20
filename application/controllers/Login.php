@@ -318,15 +318,6 @@ public function updateprof()
         $this->load->view('message', $result);
         $this->load->view('template/footer.php');
     }
-public function sendSMS(){
-    $ujumbe = $this->input->post('ujumbe');
-    $contact = $this->input->post('contact');
-    $result['data'] = $ujumbe;
-    $result['data1'] =$contact;
-    $this->load->view('template/header.php');
-    $this->load->view('message_view', $result);
-    $this->load->view('template/footer.php');
-}
     // public function resendMsg()
     // {
 
@@ -336,13 +327,24 @@ public function sendSMS(){
     // {
 
     // }
-    
+
     public function sendmessage(){
-        $this->load->library('SendSMS');
-        $new = new SendSMS();
-        $result['data'] = $new->getBalance();
-       $this->load->view('template/header.php');
-        $this->load->view('test', $result);
-        $this->load->view('template/footer.php');
+        $message  = $this->input->post('ujumbe');
+        $recipients = $this->input->post('contact');
+        $from ="0733248479";
+        $result['data1'] = $this->sendsms->fetchMessage($recipients, $message, $from);
+        if($result == TRUE){
+            $this->Main_Model->saveMessages();
+            $this->load->view('template/header.php');
+            $this->load->view('test', $result);
+            $this->load->view('template/footer.php');
+        }else{
+            $this->Main_Model->saveMessages();
+            $this->session->set_flashdata('error_msg', "Hey there was an error sending Messages");
+            $this->load->view('template/header.php');
+            $this->load->view('test', $result);
+            $this->load->view('template/footer.php');
+        }
+
     }
 }
